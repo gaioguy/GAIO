@@ -10,4 +10,4 @@ A Matlab toolbox for the global analysis of invariant objects in dynamical syste
 
 After unpacking the archive add the resulting folder to your Matlab path, e.g.
 
-    >> addpath(genpath('/Users/junge/GAIO'))
+    >> addpath(genpath('/Users/gaioguy/GAIO'))
