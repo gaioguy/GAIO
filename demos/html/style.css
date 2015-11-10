@@ -1,0 +1,135 @@
+/** BASIC */
+
+html {
+    overflow-y: scroll
+}
+
+body {
+	margin: 20px;
+	padding: 0px;
+	font-size: 14px;
+	color: #000; 
+	background-color: #FFF;
+	font-family: "Lucida Sans", Arial, Helvetica, sans-serif;
+}
+
+a:link {
+	color: #004784;
+	background: inherit;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #004784;
+	background: inherit;
+	text-decoration: none;
+}
+
+a:hover {
+	color:#627684; 
+	background-color: inherit;
+	text-decoration: none;
+}
+
+h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color:#d55000;
+  font-size: 14pt;
+  text-transform: uppercase;
+  margin-top: 20px;
+}
+
+h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: #d55000;
+  font-size: 12pt;
+  margin-top: 1px;
+}
+
+h3 {
+	margin: 0px;
+	padding: 0px;
+	font-size: 11px;
+	text-transform: uppercase;
+}
+
+p, ol, ul {
+	margin-top: 0px;
+}
+
+.hr1 {
+	clear: both;
+	margin: 2px 0px 2px 0px;
+	border: 1px dashed #4d506d;
+}
+
+.hr1 hr {
+	display: none;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+td {
+	padding:0;
+}
+
+span.comment {
+	color:green;
+} 
+
+pre,p,h1,h2,div.content div {
+  max-width: 800px;
+  width: auto !important; width: 800px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+  word-wrap:break-word;
+}
+
+pre.error {
+  color: red;
+}
+pre, tt, code { font-size:14px; }
+pre { margin:0px 0px 20px; }
+
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; } 
+pre.codeoutput { padding:10px 11px; margin:0px 0px 10px; color:#4c4c4c; }
+
+pre.codeoutput {
+  color: #444;
+  font-family: Courier, "Courier New", "Lucida Console", "Lucida Sans Typewriter", Lucidatypewriter, "Andale Mono", fixed, monospace;
+}
+
+pre.codeinput {
+  font-family: Courier, "Courier New", "Lucida Console", "Lucida Sans Typewriter", Lucidatypewriter, "Andale Mono", fixed, monospace;
+}
+
+img {
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+

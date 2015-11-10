@@ -1,0 +1,55 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["\$","\$"],["\\(","\\)"]], skipTags: ["script","noscript","style","textarea","code"]}
+  });
+</script><!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>invariant_density</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-02-26"><meta name="DC.source" content="invariant_density.m"><link href="style.css" rel="stylesheet" type="text/css"></head><body><div class="content"><h2>GAIO demo: Natural invariant measure of the logistic map<a name="1"></a></h2><pre class="codeinput">mu = 4; f = @(x) mu*x.*(1-x);          <span class="comment">% the logistic map</span>
+n = 300; X = linspace(-1,1,n)';        <span class="comment">% uniform grid of sample points</span>
+c = [0.5]; r = [0.5]; t = Tree(c, r);  <span class="comment">% the tree</span>
+</pre><h2>Construct full subdivison<a name="2"></a></h2><pre class="codeinput">sd = 8; depth = 8;
+<span class="keyword">for</span> i=1:depth,
+    t.set_flags(<span class="string">'all'</span>, sd);
+    t.subdivide;
+<span class="keyword">end</span>
+</pre><h2>Compute invariant vector<a name="3"></a></h2><pre class="codeinput">P = tpmatrix(t, f, X, depth);
+[v,lambda] = eigs(P,1);
+</pre><pre class="codeoutput">256 of 256 boxes, 0.0 sec
+</pre><h2>Plot invariant density<a name="4"></a></h2><pre class="codeinput">n = t.count(depth); x = linspace(0,1,n);
+h = abs(v)*n./norm(v,1);
+bar(x,h,1); axis([0 1 0 10]);
+xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'density'</span>);
+</pre><img vspace="5" hspace="5" src="invariant_density_01.png" alt=""> <p class="footer" style="font-size: 8pt"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% GAIO demo: Natural invariant measure of the logistic map
+%
+
+mu = 4; f = @(x) mu*x.*(1-x);          % the logistic map
+n = 300; X = linspace(-1,1,n)';        % uniform grid of sample points 
+c = [0.5]; r = [0.5]; t = Tree(c, r);  % the tree
+
+%% Construct full subdivison
+sd = 8; depth = 8;
+for i=1:depth,
+    t.set_flags('all', sd);
+    t.subdivide;
+end
+
+%% Compute invariant vector
+P = tpmatrix(t, f, X, depth);
+[v,lambda] = eigs(P,1);
+
+%% Plot invariant density
+n = t.count(depth); x = linspace(0,1,n);
+h = abs(v)*n./norm(v,1);
+bar(x,h,1); axis([0 1 0 10]);
+xlabel('x'); ylabel('density');
+
+##### SOURCE END #####
+--></body></html>

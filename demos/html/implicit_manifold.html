@@ -1,0 +1,76 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["\$","\$"],["\\(","\\)"]], skipTags: ["script","noscript","style","textarea","code"]}
+  });
+</script><!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GAIO demo: Computing implicitely defined manifolds</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-02-27"><meta name="DC.source" content="implicit_manifold.m"><link href="style.css" rel="stylesheet" type="text/css"></head><body><div class="content"><h1>GAIO demo: Computing implicitely defined manifolds</h1><!--introduction--><!--/introduction--><h2>Definition of the manifold<a name="1"></a></h2><p>Here is the Devils's curve:</p><pre class="codeinput">a = 0.9; b = 1;
+H = @(x) x(:,1).^2.*(x(:,1).^2-b^2) - x(:,2).^2.*(x(:,2).^2-a^2);
+</pre><h2>Preparations<a name="2"></a></h2><pre class="codeinput">n = 20; x = linspace(-1,1,n)';
+[XX,YY] = meshgrid(x,x); X = [ XX(:) YY(:) ];  <span class="comment">% sample points in the unit square</span>
+c = [0 0]; r = [2 2]; t = Tree(c, r);          <span class="comment">% the box collection</span>
+</pre><h2>Computing the manifold by a subdivison algorithm<a name="3"></a></h2><pre class="codeinput">dim = t.dim; depth = 18;
+hit = 1; sd = 8;                               <span class="comment">% define some flags</span>
+<span class="keyword">for</span> d = 1:depth,
+    t.set_flags(<span class="string">'all'</span>, sd);                    <span class="comment">% flags all boxes for subdivision</span>
+    t.subdivide;                               <span class="comment">% subdivide all flaged boxes</span>
+    b = t.first_box(-1);                       <span class="comment">% loop over all leaves of the tree</span>
+    <span class="keyword">while</span> (~isempty(b))
+        c = b(1:dim); r = b(dim+1:2*dim);      <span class="comment">% center and radius of the current box</span>
+        p = X*diag(r) + ones(size(X))*diag(c); <span class="comment">% sample points in the current box</span>
+        <span class="keyword">if</span> min(sign(H(p)))*max(sign(H(p))) &lt; 0 <span class="comment">% check whether box intersects the manifold</span>
+           t.set_flags(c, hit);                <span class="comment">% if so, flag box</span>
+        <span class="keyword">end</span>
+        b = t.next_box(-1);
+    <span class="keyword">end</span>
+    t.remove(hit);                             <span class="comment">% remove all *non* flaged boxes</span>
+<span class="keyword">end</span>
+</pre><h2>Plot<a name="4"></a></h2><pre class="codeinput">boxplot2(t); xlabel(<span class="string">'$x$'</span>); ylabel(<span class="string">'$y$'</span>);
+</pre><img vspace="5" hspace="5" src="implicit_manifold_01.png" alt=""> <h2>Cleanup<a name="5"></a></h2><pre class="codeinput">delete(t);
+</pre><p class="footer" style="font-size: 8pt"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% GAIO demo: Computing implicitely defined manifolds
+%
+
+%% Definition of the manifold
+% Here is the Devils's curve:
+a = 0.9; b = 1;
+H = @(x) x(:,1).^2.*(x(:,1).^2-b^2) - x(:,2).^2.*(x(:,2).^2-a^2);
+
+%% Preparations 
+n = 20; x = linspace(-1,1,n)';
+[XX,YY] = meshgrid(x,x); X = [ XX(:) YY(:) ];  % sample points in the unit square
+c = [0 0]; r = [2 2]; t = Tree(c, r);          % the box collection
+ 
+%% Computing the manifold by a subdivison algorithm
+dim = t.dim; depth = 18;
+hit = 1; sd = 8;                               % define some flags
+for d = 1:depth,
+    t.set_flags('all', sd);                    % flags all boxes for subdivision
+    t.subdivide;                               % subdivide all flaged boxes
+    b = t.first_box(-1);                       % loop over all leaves of the tree
+    while (~isempty(b))
+        c = b(1:dim); r = b(dim+1:2*dim);      % center and radius of the current box
+        p = X*diag(r) + ones(size(X))*diag(c); % sample points in the current box
+        if min(sign(H(p)))*max(sign(H(p))) < 0 % check whether box intersects the manifold
+           t.set_flags(c, hit);                % if so, flag box
+        end
+        b = t.next_box(-1);
+    end
+    t.remove(hit);                             % remove all *non* flaged boxes
+end
+ 
+%% Plot
+boxplot2(t); xlabel('$x$'); ylabel('$y$'); 
+ 
+%% Cleanup
+delete(t);
+
+##### SOURCE END #####
+--></body></html>

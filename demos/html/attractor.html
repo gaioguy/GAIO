@@ -1,0 +1,89 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["\$","\$"],["\\(","\\)"]], skipTags: ["script","noscript","style","textarea","code"]}
+  });
+</script><!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GAIO demo: Relative global attractor of the H&eacute;non map</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-02-26"><meta name="DC.source" content="attractor.m"><link href="style.css" rel="stylesheet" type="text/css"></head><body><div class="content"><h1>GAIO demo: Relative global attractor of the H&eacute;non map</h1><!--introduction--><!--/introduction--><h2>The H&eacute;non map<a name="1"></a></h2><p>The H&eacute;non map <script type="math/tex">f(x,y)=(1-ax^+y,bx)</script> is a well known example of a map which exhibits <i>complicated dynamics</i> . Here is a plot of its attractor for \$a=1.4\$ and \$b=0.3\$.</p><pre class="codeinput">a = 1.4; b = 0.3;                                       <span class="comment">% parameters of the map</span>
+f = @(x) [1-a*x(:,1).^2+x(:,2)  b*x(:,1)];              <span class="comment">% H&eacute;non map</span>
+x = [0.1 0.1];                                          <span class="comment">% initial point</span>
+<span class="keyword">for</span> i=1:10000, x = [x; f(x(end,:))]; <span class="keyword">end</span>                <span class="comment">% iteration</span>
+plot(x(:,1),x(:,2),<span class="string">'.'</span>); xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'y'</span>);      <span class="comment">% plot of the attractor</span>
+</pre><img vspace="5" hspace="5" src="attractor_01.png" alt=""> <h2>Preparations<a name="2"></a></h2><p>In order to compute a covering of the attractor, we first choose sample points in the square \$[-1,1]^\$.  Here, we chose these points on the edges of the square.</p><pre class="codeinput">n = 40; X1 = linspace(-1,1,n)'; E = ones(size(X1));     <span class="comment">% 1d points</span>
+X = [ X1 -E; X1 E; -E X1; E X1];                        <span class="comment">% sample points in \$[-1,1]^\$</span>
+</pre><p>and initialize the tree using the square [-3,3]^2</p><pre class="codeinput">c = [0 0]; r = [3 3];
+t = Tree(c, r);
+</pre><h2>Subdivison algorithm<a name="4"></a></h2><p>We can now run the subdivision algorithm for the (relative) global attractor.</p><pre class="codeinput">dim = t.dim; depth = 20;
+hit = 1; sd = 8;                                 <span class="comment">% define flags</span>
+<span class="keyword">for</span> i=1:depth,                                   <span class="comment">% subdivide up to the given depth</span>
+    t.set_flags(<span class="string">'all'</span>, sd);                      <span class="comment">% flag all boxes for subdivision</span>
+    t.subdivide;                                 <span class="comment">% subdivide all flaged boxes</span>
+    b = t.first_box(-1);                         <span class="comment">% loop over leaves of the tree</span>
+    <span class="keyword">while</span> (~isempty(b))
+        c = b(1:dim); r = b(dim+1:2*dim);        <span class="comment">% center and radius of current box</span>
+        p = X*diag(r) + ones(size(X))*diag(c);   <span class="comment">% sample points in current box</span>
+        t.set_flags(f(p)', hit);                 <span class="comment">% map points and flag hit boxes</span>
+        b = t.next_box(-1);
+    <span class="keyword">end</span>
+    t.remove(hit);                               <span class="comment">% remove all boxes which have *not* been hit</span>
+<span class="keyword">end</span>
+</pre><h2>Plot of the box collection<a name="5"></a></h2><pre class="codeinput">boxplot2(t); xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'y'</span>);
+</pre><img vspace="5" hspace="5" src="attractor_02.png" alt=""> <h2>Cleanup<a name="6"></a></h2><pre class="codeinput">delete(t);
+</pre><p class="footer" style="font-size: 8pt"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% GAIO demo: Relative global attractor of the Hénon map
+
+%% The Hénon map
+% The Hénon map $f(x,y)=(1-ax^+y,bx)$ is a well known example of a map
+% which exhibits _complicated dynamics_ . Here is a plot of its attractor
+% for \$a=1.4\$ and \$b=0.3\$.
+a = 1.4; b = 0.3;                                       % parameters of the map
+f = @(x) [1-a*x(:,1).^2+x(:,2)  b*x(:,1)];              % Hénon map
+x = [0.1 0.1];                                          % initial point
+for i=1:10000, x = [x; f(x(end,:))]; end                % iteration
+plot(x(:,1),x(:,2),'.'); xlabel('x'); ylabel('y');      % plot of the attractor
+
+%% Preparations
+% In order to compute a covering of the attractor, we first choose sample points 
+% in the square \$[-1,1]^\$.  Here, we chose these points on the edges of
+% the square.
+n = 40; X1 = linspace(-1,1,n)'; E = ones(size(X1));     % 1d points
+X = [ X1 -E; X1 E; -E X1; E X1];                        % sample points in \$[-1,1]^\$
+%%
+% and initialize the tree using the square [-3,3]^2
+c = [0 0]; r = [3 3];                         
+t = Tree(c, r);
+
+%% Subdivison algorithm
+% We can now run the subdivision algorithm for the (relative) global
+% attractor. 
+dim = t.dim; depth = 20;
+hit = 1; sd = 8;                                 % define flags
+for i=1:depth,                                   % subdivide up to the given depth
+    t.set_flags('all', sd);                      % flag all boxes for subdivision
+    t.subdivide;                                 % subdivide all flaged boxes
+    b = t.first_box(-1);                         % loop over leaves of the tree
+    while (~isempty(b))
+        c = b(1:dim); r = b(dim+1:2*dim);        % center and radius of current box
+        p = X*diag(r) + ones(size(X))*diag(c);   % sample points in current box
+        t.set_flags(f(p)', hit);                 % map points and flag hit boxes
+        b = t.next_box(-1);
+    end
+    t.remove(hit);                               % remove all boxes which have *not* been hit
+end
+
+%% Plot of the box collection
+boxplot2(t); xlabel('x'); ylabel('y');
+
+%% Cleanup
+delete(t);
+
+
+##### SOURCE END #####
+--></body></html>

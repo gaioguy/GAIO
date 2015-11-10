@@ -1,0 +1,140 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["\$","\$"],["\\(","\\)"]], skipTags: ["script","noscript","style","textarea","code"]}
+  });
+</script><!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GAIO demo: A global unstable manifold in the Lorenz system</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-02-26"><meta name="DC.source" content="lorenz.m"><link href="style.css" rel="stylesheet" type="text/css"></head><body><div class="content"><h1>GAIO demo: A global unstable manifold in the Lorenz system</h1><!--introduction--><!--/introduction--><h2>The Lorenz attractor<a name="1"></a></h2><p>The Lorenz system \[ \begin{align} \dot x &amp; = \sigma(y-x)\\ \dot y &amp; = \rho x-y-xz\\ \dot z &amp; = xy-\beta z \end{align}\] (with standard parameters <script type="math/tex">\sigma = 10</script>, <script type="math/tex">\rho = 28</script> and <script type="math/tex">\beta=8/3</script>) was derived by <a href="http://en.wikipedia.org/wiki/Edward_Norton_Lorenz">Edward Lorenz</a> in 1963 as a simplified  model for atmospheric convection.  A simulation shows the famous <a href="http://en.wikipedia.org/wiki/Lorenz_attractor">Lorenz attractor</a> :</p><pre class="codeinput">sigma = 10; rho = 28; beta = 8/3;
+v = @(x) [sigma*(x(:,2)-x(:,1)) <span class="keyword">...</span><span class="comment">             % the Lorenz system</span>
+          rho*x(:,1)-x(:,2)-x(:,1).*x(:,3) <span class="keyword">...</span>
+          x(:,1).*x(:,2)-beta*x(:,3)];
+f = @(x) rk4(v,x,0.01,1);                       <span class="comment">% f is the time-0.01-map</span>
+y(1,:) = rand(1,3);                             <span class="comment">% random initial point</span>
+<span class="keyword">for</span> k = 1:2e4, y(k+1,:) = f(y(k,:)); <span class="keyword">end</span>        <span class="comment">% integrate</span>
+plot3(y(:,1),y(:,2),y(:,3),<span class="string">'.'</span>,<span class="string">'markersize'</span>,1); <span class="comment">% plot trajectory</span>
+view(20,30); axis <span class="string">tight</span>; axis <span class="string">square</span>;
+xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'y'</span>); zlabel(<span class="string">'z'</span>);
+</pre><img vspace="5" hspace="5" src="lorenz_01.png" alt=""> <h2>Preparations<a name="2"></a></h2><p>We first choose sample points on a uniform grid in the cube <script type="math/tex">[-1,1]^3</script>,</p><pre class="codeinput">n = 7; x = linspace(-1,1,n)';
+[XX,YY,ZZ] = meshgrid(x,x,x);
+X = [ XX(:) YY(:) ZZ(:) ];                           <span class="comment">% $7^3$ sample points</span>
+</pre><p>initialize the tree using the box <script type="math/tex">[-30,30]\times [-30,30]\times [-13,67]</script> and initalize the covering by constructing a single box containing one of the two unstable equilibria of the Lorenz system</p><pre class="codeinput">c = [0 0 27]; r = [30 30 40]; t = Tree(c,r);         <span class="comment">% the box tree</span>
+dim = 3; depth = 18;                                 <span class="comment">% the depth of the tree</span>
+x0 = [sqrt(beta*(rho-1)) sqrt(beta*(rho-1)) rho-1];  <span class="comment">% an unstable equilibrium</span>
+t.insert(x0', depth);                                <span class="comment">% construct box around x0</span>
+</pre><h2>The continuation algorithm<a name="4"></a></h2><p>The following algorithm from [M. Dellnitz, A. Hohmann. The computation of unstable manifolds using subdivision and continuation. In: H.W. Broer et. al. (eds.): Nonlinear Dynamical Systems and Chaos, PNLDE 19, Birkh&auml;user, pp. 449-459, 1996.] computes a covering of the global unstable manifold of <script type="math/tex">x_0</script>.</p><pre class="codeinput">f = @(x) rk4(v,x,0.01,20);                   <span class="comment">% time-0.2-map</span>
+none = 0; hit = 1; ins = 2; expd = 4;        <span class="comment">% define various flags</span>
+nb0 = 0; nb1 = t.count(depth); k = 0;
+<span class="keyword">while</span> nb1 &gt; nb0
+  t.change_flags(<span class="string">'all'</span>, ins, expd);          <span class="comment">% flag inserted boxes as to be expanded</span>
+  b = t.first_box(depth);                    <span class="comment">% start loop over boxes</span>
+  <span class="keyword">while</span> (~isempty(b))
+    c = b(1:dim); r = b(dim+1:2*dim);        <span class="comment">% center and radius of current box</span>
+    flags = b(2*dim+1);                      <span class="comment">% flags of current box</span>
+    <span class="keyword">if</span> (bitand(flags, expd))                 <span class="comment">% if box is to be expanded</span>
+      P = X*diag(r) + ones(size(X))*diag(c); <span class="comment">% sample points in current box</span>
+      t.insert(f(P)', depth, ins, none);     <span class="comment">% map points and insert boxes</span>
+    <span class="keyword">end</span>
+    b = t.next_box(depth);                   <span class="comment">% loop to next box</span>
+  <span class="keyword">end</span>
+  t.unset_flags(<span class="string">'all'</span>, expd);                <span class="comment">% unflag recently expanded boxes</span>
+  nb0 = nb1; nb1 = t.count(depth); k = k+1;
+  disp(sprintf(<span class="string">'step %d, %d boxes'</span>, k, nb1));
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">step 1, 7 boxes
+step 2, 19 boxes
+step 3, 42 boxes
+step 4, 76 boxes
+step 5, 120 boxes
+step 6, 168 boxes
+step 7, 259 boxes
+step 8, 347 boxes
+step 9, 437 boxes
+step 10, 622 boxes
+step 11, 955 boxes
+step 12, 1601 boxes
+step 13, 2584 boxes
+step 14, 3681 boxes
+step 15, 4492 boxes
+step 16, 4864 boxes
+step 17, 4926 boxes
+step 18, 4931 boxes
+step 19, 4931 boxes
+</pre><h2>Plot of the box collection<a name="5"></a></h2><pre class="codeinput">boxplot3(t); view(20,30); axis <span class="string">tight</span>; axis <span class="string">square</span>;
+xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'y'</span>); zlabel(<span class="string">'z'</span>);
+</pre><img vspace="5" hspace="5" src="lorenz_02.png" alt=""> <h2>Cleanup<a name="6"></a></h2><pre class="codeinput">delete(t);
+</pre><p class="footer" style="font-size: 8pt"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% GAIO demo: A global unstable manifold in the Lorenz system
+
+%% The Lorenz attractor
+% The Lorenz system \[ \begin{align} \dot x & = \sigma(y-x)\\ \dot y & =
+% \rho x-y-xz\\ \dot z & = xy-\beta z \end{align}\] (with standard
+% parameters $\sigma = 10$, $\rho = 28$ and $\beta=8/3$) was derived by
+% <http://en.wikipedia.org/wiki/Edward_Norton_Lorenz Edward Lorenz> in 1963
+% as a simplified  model for atmospheric convection.  A simulation shows
+% the famous <http://en.wikipedia.org/wiki/Lorenz_attractor Lorenz attractor> :
+sigma = 10; rho = 28; beta = 8/3;
+v = @(x) [sigma*(x(:,2)-x(:,1)) ...             % the Lorenz system
+          rho*x(:,1)-x(:,2)-x(:,1).*x(:,3) ...
+          x(:,1).*x(:,2)-beta*x(:,3)];
+f = @(x) rk4(v,x,0.01,1);                       % f is the time-0.01-map
+y(1,:) = rand(1,3);                             % random initial point
+for k = 1:2e4, y(k+1,:) = f(y(k,:)); end        % integrate 
+plot3(y(:,1),y(:,2),y(:,3),'.','markersize',1); % plot trajectory
+view(20,30); axis tight; axis square;
+xlabel('x'); ylabel('y'); zlabel('z');
+
+%% Preparations
+% We first choose sample points on a uniform grid in the cube $[-1,1]^3$,  
+n = 7; x = linspace(-1,1,n)'; 
+[XX,YY,ZZ] = meshgrid(x,x,x);                 
+X = [ XX(:) YY(:) ZZ(:) ];                           % $7^3$ sample points
+%%
+% initialize the tree using the box $[-30,30]\times [-30,30]\times
+% [-13,67]$ and initalize the covering by constructing a single box
+% containing one of the two unstable equilibria of the Lorenz system
+c = [0 0 27]; r = [30 30 40]; t = Tree(c,r);         % the box tree 
+dim = 3; depth = 18;                                 % the depth of the tree
+x0 = [sqrt(beta*(rho-1)) sqrt(beta*(rho-1)) rho-1];  % an unstable equilibrium
+t.insert(x0', depth);                                % construct box around x0
+
+%% The continuation algorithm 
+% The following algorithm from [M. Dellnitz, A. Hohmann. The computation of
+% unstable manifolds using subdivision and continuation. In: H.W. Broer et.
+% al. (eds.): Nonlinear Dynamical Systems and Chaos, PNLDE 19, Birkhäuser,
+% pp. 449-459, 1996.] computes a covering of the global unstable manifold
+% of $x_0$.
+f = @(x) rk4(v,x,0.01,20);                   % time-0.2-map
+none = 0; hit = 1; ins = 2; expd = 4;        % define various flags
+nb0 = 0; nb1 = t.count(depth); k = 0;
+while nb1 > nb0
+  t.change_flags('all', ins, expd);          % flag inserted boxes as to be expanded
+  b = t.first_box(depth);                    % start loop over boxes 
+  while (~isempty(b))
+    c = b(1:dim); r = b(dim+1:2*dim);        % center and radius of current box
+    flags = b(2*dim+1);                      % flags of current box
+    if (bitand(flags, expd))                 % if box is to be expanded
+      P = X*diag(r) + ones(size(X))*diag(c); % sample points in current box
+      t.insert(f(P)', depth, ins, none);     % map points and insert boxes
+    end
+    b = t.next_box(depth);                   % loop to next box
+  end
+  t.unset_flags('all', expd);                % unflag recently expanded boxes
+  nb0 = nb1; nb1 = t.count(depth); k = k+1;
+  disp(sprintf('step %d, %d boxes', k, nb1));
+end
+
+%% Plot of the box collection
+boxplot3(t); view(20,30); axis tight; axis square;
+xlabel('x'); ylabel('y'); zlabel('z');
+
+%% Cleanup
+delete(t);
+##### SOURCE END #####
+--></body></html>

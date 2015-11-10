@@ -1,0 +1,72 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["\$","\$"],["\\(","\\)"]], skipTags: ["script","noscript","style","textarea","code"]}
+  });
+</script><!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ftle</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-02-26"><meta name="DC.source" content="ftle.m"><link href="style.css" rel="stylesheet" type="text/css"></head><body><div class="content"><pre class="codeinput"><span class="keyword">global</span> tau ;
+tau = 10;
+f = @(x) double_gyre_map(x);
+</pre><h2>constructing the box partition<a name="2"></a></h2><pre class="codeinput">c = [1 0.5]; r = [1 0.5];
+t = Tree(c, r);
+dim = t.dim; sd = 8; depth = 12;   <span class="comment">% depth 12 means 2^12 boxes, i.e. 2^6=64 in each direction</span>
+<span class="keyword">for</span> i=1:depth,
+    t.set_flags(<span class="string">'all'</span>, sd);        <span class="comment">% flag all leaves for subdivision</span>
+    t.subdivide;                   <span class="comment">% subdivide flagged leaves</span>
+<span class="keyword">end</span>
+</pre><h2>computing the FTLE field<a name="3"></a></h2><pre class="codeinput">n = 10; X = 2*rand(n,2)-1;         <span class="comment">% sample points</span>
+h = 1e-6; ftle = zeros(t.count(-1),1);
+b = t.first_box(-1); k = 1; dispr("",0);
+<span class="keyword">while</span> (~isempty(b))
+    c = b(1:dim); r = b(dim+1:2*dim);         <span class="comment">% center and radius of current box</span>
+    p = X*diag(r) + ones(size(X))*diag(c);    <span class="comment">% sample points in the current box</span>
+    q = X*diag(r) + ones(size(X))*diag(c)+h*(2*rand(size(X,1),2)-1);  <span class="comment">% slightly shifted sample points</span>
+    d = sum(((f(p)-f(q)).^2)')./sum(((p-q).^2)'); <span class="comment">% relative distances of their images</span>
+    ftle(k) = max(log(d)/(2*tau));            <span class="comment">% the FTLE in that box</span>
+    b = t.next_box(-1); k = k+1;
+    dispr(sprintf(<span class="string">'box no %d'</span>,k),1);
+<span class="keyword">end</span>
+toc
+</pre><h2>plot<a name="4"></a></h2><pre class="codeinput">clf; boxplot2(t,<span class="string">'depth'</span>,depth,<span class="string">'density'</span>, ftle);
+</pre><p class="footer" style="font-size: 8pt"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+global tau ;
+tau = 10;
+f = @(x) double_gyre_map(x);
+
+%% constructing the box partition
+c = [1 0.5]; r = [1 0.5];                         
+t = Tree(c, r);
+dim = t.dim; sd = 8; depth = 12;   % depth 12 means 2^12 boxes, i.e. 2^6=64 in each direction
+for i=1:depth,
+    t.set_flags('all', sd);        % flag all leaves for subdivision
+    t.subdivide;                   % subdivide flagged leaves
+end
+
+%% computing the FTLE field
+n = 10; X = 2*rand(n,2)-1;         % sample points
+h = 1e-6; ftle = zeros(t.count(-1),1);
+b = t.first_box(-1); k = 1; dispr("",0);
+while (~isempty(b))
+    c = b(1:dim); r = b(dim+1:2*dim);         % center and radius of current box
+    p = X*diag(r) + ones(size(X))*diag(c);    % sample points in the current box
+    q = X*diag(r) + ones(size(X))*diag(c)+h*(2*rand(size(X,1),2)-1);  % slightly shifted sample points
+    d = sum(((f(p)-f(q)).^2)')./sum(((p-q).^2)'); % relative distances of their images
+    ftle(k) = max(log(d)/(2*tau));            % the FTLE in that box
+    b = t.next_box(-1); k = k+1;
+    dispr(sprintf('box no %d',k),1);
+end
+toc
+
+%% plot
+clf; boxplot2(t,'depth',depth,'density', ftle);   
+
+
+##### SOURCE END #####
+--></body></html>
