@@ -11,3 +11,13 @@ A Matlab toolbox for the global analysis of invariant objects in dynamical syste
 After unpacking the archive add the resulting folder to your Matlab path, e.g.
 
     >> addpath(genpath('/Users/gaioguy/GAIO'))
+    
+## References
+
+* Dellnitz, M.; Froyland, G.; Junge, O.: The algorithms behind GAIO - Set oriented numerical methods for dynamical systems,
+_in: B. Fiedler (ed.): Ergodic theory, analysis, and efficient simulation of dynamical systems_, Springer, 2001.
+* Dellnitz, M.; Junge, O.: On the approximation of complicated dynamical behavior, _SIAM Journal on Numerical Analysis_, 36 (2), 1999.
+* Dellnitz, M.; Hohmann, A.: A subdivision algorithm for the computation of unstable manifolds and global attractors.
+_Numerische Mathematik_ 75, pp. 293-317, 1997. 
+
+
