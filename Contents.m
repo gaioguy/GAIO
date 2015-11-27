@@ -17,4 +17,4 @@
 %   tpgraph      - transition probability graph
 %   dpgraph      - dynamic programming graph
 %   dijkstra     - shortest paths in a directed graph 
-%   boxplot      - box plot in 2D and 3D
+%   boxplot2/3   - box plot in 2D and 3D
