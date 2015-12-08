@@ -11,10 +11,9 @@
 % <html>
 % <img src="lorenz.jpg" width="250" height="250">
 % <img src="chua2.jpg" width="250" height="250">
-% <img src="ftle.jpg" height="250">
 % </html>
 
-%% <download.html Download (v3.0)>
+%% <https://github.com/gaioguy/GAIO Download (v3.0)>
 
 %% Demos
 % 
