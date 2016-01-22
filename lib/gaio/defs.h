@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <mex.h>
 
 #define MAXDIM 256
 #define sign(x) ((x) > 0 ? 1 : ((x)==0 ? 0 : -1))

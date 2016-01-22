@@ -6,7 +6,7 @@ n = 300; X = linspace(-1,1,n)';        % uniform grid of sample points
 c = [0.5]; r = [0.5]; t = Tree(c, r);  % the tree
 
 %% Construct full subdivison
-sd = 8; depth = 8;
+sd = 8; depth = 14;
 for i=1:depth,
     t.set_flags('all', sd);
     t.subdivide;

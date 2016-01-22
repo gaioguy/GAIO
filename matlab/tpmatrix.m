@@ -17,7 +17,6 @@ d = t.dim;
 b = t.boxes(depth);                  % get the geometry of the boxes
 N = size(b,2); S = whos('X'); l = floor(5e7/S.bytes);
 I = []; IJS = []; tic;
-if verbose, dispr('',0); end
 for k = 0:floor(N/l),                % split in chunks of size l
     K = k*l+1:min((k+1)*l,N);
     c = b(1:d,K); r = b(d+1:2*d,1);  % center and radii of the boxes
@@ -28,7 +27,7 @@ for k = 0:floor(N/l),                % split in chunks of size l
     J = kron(K',ones(size(X,1),1));  % column numbers
     [I,J,S] = find(sparse(I(pI), J(pI), 1, N, N));   % transition matrix
     IJS = [IJS; I,J,S];
-    if verbose, dispr(sprintf('%d of %d boxes, %.1f sec',min((k+1)*l,N),N,toc),1); end
+    if verbose, fprintf('%d of %d boxes, %.1f sec\n',min((k+1)*l,N),N,toc); end
 end 
 T = sparse(IJS(:,1), IJS(:,2), IJS(:,3), N, N);   % transition matrix
 cs = sum(T);

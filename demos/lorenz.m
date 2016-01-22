@@ -12,10 +12,15 @@ v = @(x) [sigma*(x(:,2)-x(:,1)) ...             % the Lorenz system
           rho*x(:,1)-x(:,2)-x(:,1).*x(:,3) ...
           x(:,1).*x(:,2)-beta*x(:,3)];
 f = @(x) rk4(v,x,0.01,1);                       % f is the time-0.01-map
-y(1,:) = rand(1,3);                             % random initial point
-for k = 1:2e4, y(k+1,:) = f(y(k,:)); end        % integrate 
-plot3(y(:,1),y(:,2),y(:,3),'.','markersize',1); % plot trajectory
-view(20,30); axis tight; axis square;
+y(1,1:3) = rand(1,3);                             % random initial point
+for k = 1:2e4, 
+    y(k+1,:) = f(y(k,:)); 
+    plot3(y(:,1),y(:,2),y(:,3),'.','markersize',10);
+    view(20,30);
+    drawnow
+end        % integrate 
+ % plot trajectory
+ axis tight; axis square;
 xlabel('x'); ylabel('y'); zlabel('z');
 
 %% Preparations

@@ -52,7 +52,7 @@ Node *NodeInsert(Node *parent, int sof) {
 void NodeInfo(FILE *out, int n, Node *node) {
   if (node) {
     fputns(' ', n, out);
-    fprintf(out, "(%d,%d,%u)\n", node->sof, node->sub, node->flags);
+    fprintf(out, "(%d,%d,%lu)\n", node->sof, node->sub, node->flags);
     SetInfo(out, n+7, node->childs);
   }     
 }

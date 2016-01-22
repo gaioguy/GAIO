@@ -9,7 +9,7 @@
 #include <math.h>
 #include <gaio/IndSubshift.h>
 
-static _no_of_newnodes = 0;
+static int _no_of_newnodes = 0;
 
 IndSubshift *IndSubshiftNew(SparseMatrix *A, unsigned char *letters) {
   int i;

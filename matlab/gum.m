@@ -1,4 +1,4 @@
-function gum(T, f, X, depth)
+function gum(t, f, X, depth)
 
 % GUM   global unstable manifold.
 %
@@ -18,17 +18,18 @@ function gum(T, f, X, depth)
 %
 %   (C) 2013, djs GbR
 
-dim = T.dim;
-none = 0; ins = 2; expd = 4;         % defining flags
-nb0 = 0;  nb1 = T.count(depth);      % bookkeeping of the number of boxes
+dim = t.dim;
+none = 0; ins = 2; expd = 4;             % defining flags
+nb0 = 0;  nb1 = t.count(depth);          % bookkeeping of the number of boxes
 tic; j = 1;
-while nb1 > nb0                      % while new boxes are being inserted
-  T.change_flags('all', ins, expd);  % mark inserted boxes as to be expanded
-  b = T.boxes(depth);                % get the geometry of the boxes
-  flags = b(7,:); 
+t.set_flags('all', ins, depth);
+while nb1 > nb0                          % while new boxes are being inserted
+  t.change_flags('all', ins, expd);      % mark inserted boxes as to be expanded
+  b = t.boxes(depth); M = size(b,2);     % get the geometry of the boxes
+  flags = b(2*dim+1, :); 
   I = find(bitand(flags,expd));          % find boxes to expand
   b = b(:,I); N = size(b,2);
-  S = whos('X'); l = floor(5e7/S.bytes); dispr('',0);
+  S = whos('X'); l = floor(5e7/S.bytes);
   for k = 0:floor(N/l),                  % split in chunks of size l
       K = k*l+1:min((k+1)*l,N);
       c = b(1:dim,K);                    % center ...
@@ -36,11 +37,10 @@ while nb1 > nb0                      % while new boxes are being inserted
       n = size(c,2); E = ones(n,1);
       P = kron(E,X)*diag(r) + ...        % sample points in all boxes
           kron(c',ones(size(X,1),1));
-      T.insert(f(P)', depth, ins, none); % map sample points and insert boxes
-      dispr(sprintf('step %d: %d of %d boxes, %.1f sec',j,min((k+1)*l,N),N,toc),1);
+      t.insert(f(P)', depth, ins, none); % map sample points and insert boxes
   end
-  fprintf('\n');
-  T.unset_flags('all', expd);        % unflag recently expanded boxes
-  nb0 = nb1; nb1 = T.count(depth);
+  fprintf('step %d: %d of %d boxes, %.1f sec\n',j,N,M,toc);
+  t.unset_flags('all', expd);        % unflag recently expanded boxes
+  nb0 = nb1; nb1 = t.count(depth);
   j = j+1;
 end

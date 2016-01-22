@@ -16,7 +16,7 @@ void mexFunction(
   IterFree(&iter);
   null = mxCreateDoubleMatrix(1,1,mxREAL);
   *mxGetPr(null) = 0;
-  mxSetField(prhs[0], 0, "handle", null);
+  mxSetField((mxArray *)prhs[0], 0, "handle", null);
 }
 
 

@@ -4,7 +4,7 @@
 #include <gaio/SparseMatrix.h>
 #include <gaio/IndSubshift.h>
 
-static SparseMatrix *mxSparse_to_SparseMatrix(mxArray *A) {
+static SparseMatrix *mxSparse_to_SparseMatrix(const mxArray *A) {
     
   SparseMatrix *SA;
   double  *pr;

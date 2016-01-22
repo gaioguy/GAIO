@@ -10,7 +10,7 @@ n = 10; x = linspace(-1,1,n)'; [XX,YY] = meshgrid(x,x);
 X = [ XX(:) YY(:) ];                     % sample points (uniform grid)
 c = [pi pi]; r = [pi pi]; 
 tree = Tree(c, r);                       % the box collection
-sd = 8; depth = 12; 
+sd = 8; depth = 14; 
 for i = 1:depth,
     tree.set_flags('all', sd);           % flag all leaves
     tree.subdivide;                      % subdivide all flagged leaves
@@ -22,7 +22,7 @@ P = tpmatrix(tree, f, X, depth, 1);
 l = diag(lambda)
 
 %% plot of second eigenvector
-clf; ev = xh(:,2)/norm(xh(:,2),inf);
+clf; ev = xh(:,3)/norm(xh(:,3),inf);
 boxplot2(tree,'depth',depth,'density',ev); 
-axis tight; axis square; shading flat; caxis([-1,1]);
+axis tight; axis square; shading flat;colorbar;  %caxis([-1,1]);
 

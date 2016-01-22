@@ -16,7 +16,7 @@ function rga(t, f, X, steps)
 %
 %   (C) 2013, djs GbR
 
-dim = t.dim; hit = 1; sd = 8; dispr('',0); tic;
+dim = t.dim; hit = 1; sd = 8; tic;
 for s = 1:steps,
     t.set_flags('all', sd);                % flag all boxes for subdivision
     t.subdivide(sd);                       % subdivide flagged boxes
@@ -26,7 +26,7 @@ for s = 1:steps,
         K = k*l+1:min((k+1)*l,N);
         c = b(1:dim,K);                    % center ...
         r = b(dim+1:2*dim,1);              % ... and radii of the boxes
-        n = length(c); E = ones(n,1);       
+        n = size(c,2); E = ones(n,1);       
         P = kron(E,X)*diag(r) + ...        % sample points in all boxes
             kron(c',ones(size(X,1),1));
         t.set_flags(f(P)', hit);           % map points and flag hit boxes
