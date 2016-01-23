@@ -30,7 +30,6 @@ for s = 1:steps,
         P = kron(E,X)*diag(r) + ...        % sample points in all boxes
             kron(c',ones(size(X,1),1));
         t.set_flags(f(P)', hit);           % map points and flag hit boxes
-        fprintf('.');
     end
     fprintf('depth %d, %d boxes, %.1f sec\n',t.depth,N,toc);
     t.remove(hit);                         % remove non-flagged boxes
