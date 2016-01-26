@@ -31,6 +31,6 @@ for s = 1:steps,
             kron(c',ones(size(X,1),1));
         t.set_flags(f(P)', hit);           % map points and flag hit boxes
     end
-    fprintf('depth %d, %d boxes, %.1f sec\n',t.depth,N,toc);
     t.remove(hit);                         % remove non-flagged boxes
+    fprintf('depth %d, %d boxes, %.1f sec\n',t.depth,t.count(-1),toc);
 end

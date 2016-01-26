@@ -1,39 +1,32 @@
-%% Relative global attractor of Chuas circuit 
+%% GAIO demo
+% almost invariant sets in Chua's circuit 
 
-%% The map
-a = 16; b = 33; m0 = -0.2; m1 = 0.01;
+%% the map
+a = 16; b = 33; m0 = -0.2; m1 = 0.01;            % Chua's circuit
 v = @(x) [a*(x(:,2) - m0*x(:,1) - m1/3*x(:,1).^3), ...
           x(:,1)-x(:,2)+x(:,3),... 
           -b*x(:,2)];
-% map is given by the time integrated vector field
-h = 0.05; n = 5; f = @(x) rk4(v,x,h,n); 
-x = [0.1 0.1 0.1];                                              % initial point
-for i=1:10000, x = [x; f(x(end,:))]; end                        % iteration
-plot3(x(:,1),x(:,2),x(:,3),'.'); xlabel('x'); ylabel('y');      % plot of the attractor
+h = 0.05; n = 5; f = @(x) rk4(v,x,h,n);          % f is the flow map
 
-%% Preparations
-n = 10; x = linspace(-1,1,n)'; [XX,YY,ZZ] = meshgrid(x,x,x);
-X = [ XX(:) YY(:) ZZ(:) ];
-% the tree
-c = [0 0 0]; r = [12, 2.5, 20]; t = Tree(c,r);
+%% preparations
+n = 5; x = linspace(-1,1,n)'; [XX,YY,ZZ] = meshgrid(x,x,x);
+X = [ XX(:) YY(:) ZZ(:) ];                       % sample points
+c = [0 0 0]; r = [12, 2.5, 20]; t = Tree(c,r);   % the box collection
 
-%% Subdivison algorithm
-dim = t.dim; hit = 1; sd = 8; depth = 15; tic
-for i=1:depth,
-    t.set_flags('all', sd);                             % flag all leaves for subdivision
-    t.subdivide;                                        % subdivide flagged leaves
-    b = t.boxes(-1); n = size(b,2);                     % get boxes from the leaves
-    c = b(1:dim,:); r = b(dim+1:2*dim,1);               % centers and radii of the boxes
-    E = ones(n,1);                                      
-    P = kron(E,X)*diag(r) + kron(c',ones(size(X,1),1)); % sample points in all boxes
-    t.set_flags(f(P)', hit);                            % map points and flag hitted boxes
-    t.remove(hit);                                      % remove boxes which have not been hit
-end
-toc
+%% computing the covering (here, by continuation)
+x0 = [sqrt(3*m0/m1) 0 -sqrt(3*m0/m1)];           % equilibrium
+depth = 24; t.insert([x0; -x0]', depth);         % initialization
+gum(t, f, X, depth);                             % global unstable manifold
 
-%% Plot
-clf; h = boxplot3(t); xlabel('x'); ylabel('y');          % plot of the covering
+%% computing the measure
+X = 2*rand(100,3)-1;                             % points for MC quadrature
+P = tpmatrix(t, f, X, depth, 1);                 % transition matrix 
+[w,lambda] = eigs(P,2,'lr',opts);                % eigenvectors
 
-%% Clean up
-delete(t);
-
+%% plot
+% wp = log10(abs(w(:,1)));                         % uncomment for inv. measure
+wp = log10(max(w(:,2),1e-16))-log10(max(-w(:,2),1e-16)); % 2nd eigenvector 
+clf; boxplot3(t,'depth',depth,'density', wp,'alpha',0.1);   
+load lorenz_cmap; colormap(cmap); colorbar       % special colormap
+view(20,20); axis square; axis tight;
+xlabel('x'); ylabel('y'); zlabel('z'); 
