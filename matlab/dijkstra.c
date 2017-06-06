@@ -168,7 +168,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
   plhs[0] = mxCreateDoubleMatrix(1, graph.n, mxREAL);
   pr = mxGetPr(plhs[0]);
-  for (i=0; i<graph.n; i++) pr[i] = ( d[i]==VERY_LARGE ? -1 : d[i]);
+  for (i=0; i<graph.n; i++) pr[i] = ( d[i]==VERY_LARGE ? mxGetInf() : d[i]);
   if (nrhs > 1) {
     plhs[1] = mxCreateDoubleMatrix(1, graph.n, mxREAL);
     pr = mxGetPr(plhs[1]);

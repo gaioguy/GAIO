@@ -26,6 +26,7 @@ defaultColor = 'r';
 defaultCoords = [1 2 3];
 defaultDepth = -1;
 defaultAlpha = 1; alpha_edge = 1;
+defaultEdgeColor = 'k';
 
 addRequired(p,'B');
 addParamValue(p,'color',defaultColor,@ischar);
@@ -33,6 +34,7 @@ addParamValue(p,'coords',defaultCoords,@isvector);
 addParamValue(p,'depth',defaultDepth,@isnumeric);
 addParamValue(p,'density',[],@isvector);
 addParamValue(p,'alpha',defaultAlpha,@isnumeric);
+addParamValue(p,'edgecolor',defaultEdgeColor,@ischar);
 
 parse(p, B, varargin{:});
 
@@ -41,6 +43,7 @@ iy    = p.Results.coords(2);
 iz    = p.Results.coords(3);
 depth = p.Results.depth;
 alpha = p.Results.alpha;
+edgecolor = p.Results.edgecolor;
 if alpha < 1,
     alpha_edge = 0;
 end
@@ -61,32 +64,32 @@ end
 x=[b(:,ix)-b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)-b(:,ix+dim)];
 y=[b(:,iy)-b(:,iy+dim) b(:,iy)-b(:,iy+dim) b(:,iy)-b(:,iy+dim) b(:,iy)-b(:,iy+dim)];
 z=[b(:,iz)-b(:,iz+dim) b(:,iz)-b(:,iz+dim) b(:,iz)+b(:,iz+dim) b(:,iz)+b(:,iz+dim)];
-h = patch(x',y',z',col'); set(h,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
+h = patch(x',y',z',col'); set(h,'edgeColor',edgecolor,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
 
 x=[b(:,ix)-b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)-b(:,ix+dim)];
 y=[b(:,iy)+b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)+b(:,iy+dim)];
 z=[b(:,iz)-b(:,iz+dim) b(:,iz)-b(:,iz+dim) b(:,iz)+b(:,iz+dim) b(:,iz)+b(:,iz+dim)];
-h = patch(x',y',z',col'); set(h,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
+h = patch(x',y',z',col'); set(h,'edgeColor',edgecolor,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
 
 x=[b(:,ix)+b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)+b(:,ix+dim)];
 y=[b(:,iy)-b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)-b(:,iy+dim)];
 z=[b(:,iz)-b(:,iz+dim) b(:,iz)-b(:,iz+dim) b(:,iz)+b(:,iz+dim) b(:,iz)+b(:,iz+dim)];
-h = patch(x',y',z',col'); set(h,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
+h = patch(x',y',z',col'); set(h,'edgeColor',edgecolor,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
 
 x=[b(:,ix)-b(:,ix+dim) b(:,ix)-b(:,ix+dim) b(:,ix)-b(:,ix+dim) b(:,ix)-b(:,ix+dim)];
 y=[b(:,iy)-b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)-b(:,iy+dim)];
 z=[b(:,iz)-b(:,iz+dim) b(:,iz)-b(:,iz+dim) b(:,iz)+b(:,iz+dim) b(:,iz)+b(:,iz+dim)];
-h = patch(x',y',z',col'); set(h,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
+h = patch(x',y',z',col'); set(h,'edgeColor',edgecolor,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
 
 x=[b(:,ix)-b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)-b(:,ix+dim)];
 y=[b(:,iy)-b(:,iy+dim) b(:,iy)-b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)+b(:,iy+dim)];
 z=[b(:,iz)+b(:,iz+dim) b(:,iz)+b(:,iz+dim) b(:,iz)+b(:,iz+dim) b(:,iz)+b(:,iz+dim)];
-h = patch(x',y',z',col'); set(h,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
+h = patch(x',y',z',col'); set(h,'edgeColor',edgecolor,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
 
 x=[b(:,ix)-b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)+b(:,ix+dim) b(:,ix)-b(:,ix+dim)];
 y=[b(:,iy)-b(:,iy+dim) b(:,iy)-b(:,iy+dim) b(:,iy)+b(:,iy+dim) b(:,iy)+b(:,iy+dim)];
 z=[b(:,iz)-b(:,iz+dim) b(:,iz)-b(:,iz+dim) b(:,iz)-b(:,iz+dim) b(:,iz)-b(:,iz+dim)];
-h = patch(x',y',z',col'); set(h,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
+h = patch(x',y',z',col'); set(h,'edgeColor',edgecolor,'FaceAlpha',alpha,'EdgeAlpha',alpha_edge);
 
 
 

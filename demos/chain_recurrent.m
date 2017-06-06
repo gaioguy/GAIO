@@ -15,7 +15,7 @@ dim = t.dim; hit = 1; sd = 8; depth = 14; tic
 for d = 1:depth
   t.set_flags('all', sd);
   t.subdivide;
-  G = tpmatrix(t, f, X, d, 1);
+  G = tpmatrix(t, f, X, d, 0);
   sc = scc(G,G');
   sc(find(sc > -1)) = 1; sc(find(sc == -1)) = 0;
   flags = sprintf('%1d', sc);
@@ -25,7 +25,7 @@ for d = 1:depth
 end
 
 %% plot
-boxplot2(t); xlabel('x'); ylabel('y');
+boxplot2(t); xlabel('$x$'); ylabel('$y$');
 
 %% clean up
 delete(t);

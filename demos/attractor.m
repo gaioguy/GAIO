@@ -1,11 +1,11 @@
-%% GAIO demo: Relative global attractor of the Hénon map
+%% GAIO demo: Relative global attractor of the H?non map
 
-%% The Hénon map
-% The Hénon map $f(x,y)=(1-ax^+y,bx)$ is a well known example of a map
+%% The H?non map
+% The H?non map $f(x,y)=(1-ax^+y,bx)$ is a well known example of a map
 % which exhibits _complicated dynamics_ . Here is a plot of its attractor
 % for \$a=1.4\$ and \$b=0.3\$.
 a = 1.4; b = 0.3;                                       % parameters of the map
-f = @(x) [1-a*x(:,1).^2+x(:,2)  b*x(:,1)];              % Hénon map
+f = @(x) [1-a*x(:,1).^2+x(:,2)  b*x(:,1)];              % H?non map
 x = [0.1 0.1];                                          % initial point
 for i=1:10000, x = [x; f(x(end,:))]; end                % iteration
 plot(x(:,1),x(:,2),'.'); xlabel('x'); ylabel('y');      % plot of the attractor
@@ -26,15 +26,15 @@ t = Tree(c, r);
 % attractor. 
 dim = t.dim; depth = 20;
 hit = 1; sd = 8;                                 % define flags
-for i=1:depth,                                   % subdivide up to the given depth
+for i = 1:depth,                                 % subdivide up to the given depth
     t.set_flags('all', sd);                      % flag all boxes for subdivision
-    t.subdivide;                                 % subdivide all flaged boxes
-    b = t.first_box(-1);                         % loop over leaves of the tree
+    t.subdivide(sd);                             % subdivide all flaged boxes
+    b = t.first_box(i);                          % loop over leaves of the tree
     while (~isempty(b))
         c = b(1:dim); r = b(dim+1:2*dim);        % center and radius of current box
         p = X*diag(r) + ones(size(X))*diag(c);   % sample points in current box
         t.set_flags(f(p)', hit);                 % map points and flag hit boxes
-        b = t.next_box(-1);
+        b = t.next_box(i);
     end
     t.remove(hit);                               % remove all boxes which have *not* been hit
 end

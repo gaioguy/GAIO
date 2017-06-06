@@ -1,4 +1,4 @@
-function T = tpmatrix(t, f, X, depth, verbose)
+function T = tpmatrix(tree, f, X, depth, verbose)
 
 % TPMATRIX   transition probability matrix.
 %
@@ -13,17 +13,17 @@ function T = tpmatrix(t, f, X, depth, verbose)
 
 %   (C) 2013, djs2 GbR
 
-d = t.dim;
-b = t.boxes(depth);                  % get the geometry of the boxes
+d = tree.dim;
+b = tree.boxes(depth);                       % get the geometry of the boxes
 N = size(b,2); S = whos('X'); l = floor(5e7/S.bytes);
 I = []; IJS = []; tic;
-for k = 0:floor(N/l),                % split in chunks of size l
+for k = 0:floor(N/l),                     % split in chunks of size l
     K = k*l+1:min((k+1)*l,N);
-    c = b(1:d,K); r = b(d+1:2*d,1);  % center and radii of the boxes
-    n = size(c,2); E = ones(n,1);    % sample points in all boxes
+    c = b(1:d,K); r = b(d+1:2*d,1);       % center and radii of the boxes
+    n = size(c,2); E = ones(n,1);         % sample points in all boxes
     P = kron(E,X)*diag(r) + kron(c',ones(size(X,1),1));
-    I = t.search(f(P)', depth);      % get box numbers of image points
-    pI = find(I>0);                  % I <= 0 iff f(P) is outside of covering
+    I = tree.search(f(P)', depth);    % get box numbers of image points
+    pI = find(I>0);              % I <= 0 iff f(P) is outside of covering
     J = kron(K',ones(size(X,1),1));  % column numbers
     [I,J,S] = find(sparse(I(pI), J(pI), 1, N, N));   % transition matrix
     IJS = [IJS; I,J,S];
