@@ -26,7 +26,7 @@ You can visualize the boxes on a certain `depth` in 2D or 3D with `boxplot2`/`bo
 ```matlab
 >> boxplot2(t)
 ```
-<img src="https://github.com/gaioguy/GAIO/blob/master/doc/boxplot_1.png" width="600px"/>
+<img src="boxplot_1.png" width="600px"/>
 
 Since the tree only contains the root node, only a single box is shown. You can also output the boxes in matrix form:
 ```matlab
@@ -40,7 +40,9 @@ b =
      1
 ```
 Each column of the matrix `b` corresponds to one box, with the first d entries specifying the center (here [0 0]), the next d entries the radius (here [2 2]), the next entry some flags (here 0) and the last entry some additional information (largely unused).
+
 ### Flags
+
 A node in the tree can be given different flags which can later be used in order to, e.g., subdivide a node/box:
 ```matlab
 >> sd = 8;
@@ -54,7 +56,7 @@ Here, all leaves of the tree (which is only the root so far) are given the flag 
 ```matlab
 >> boxplot2(t)
 ```
-<img src="https://github.com/gaioguy/GAIO/blob/master/doc/boxplot_2.png" width="600px"/>
+<img src="boxplot_2.png" width="600px"/>
 
 You can also set flags in certain nodes only. The most common case is that you have a set of points and you would like to set some flag in each node/box which contains at least one of these points:
 ```matlab
@@ -84,6 +86,7 @@ ans =
 Internally, the flags of a node are stored in a single byte which is interpreted as a bitstring of 0/1 flags.  When using `tree.set_flags('all', sd)`, the least significant byte of `sd` is logically ORed with the flag byte of each node, i.e. `tree.set_flags('all',8)` yields the same result as `tree.set_flags('all',520)`.
 
 ### Looping over nodes
+
 The tree methods `first_box` and `next_box`enable an iteration over the nodes at a given depth of the tree.  In our case, the iteration will loop over the two nodes which we just generated at depth 1. For example, we could output the centers and the flags of the boxes at depth 1:
 ```matlab
 >> depth = 1; dim = 2;
