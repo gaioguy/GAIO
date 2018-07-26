@@ -9,10 +9,10 @@ GAIO (*Global Analysis of Invariant Objects*) is a Matlab toolbox for the comput
 After unpacking the archive add the resulting folder to your Matlab path, e.g.
 
     >> addpath(genpath('/Users/gaioguy/GAIO'))
-    
+   
+## Documentation
 
-    
-## [Documentation](https://github.com/gaioguy/GAIO/wiki)
+[INtroductory example](Introductory_example.md)
     
 ## References
 
