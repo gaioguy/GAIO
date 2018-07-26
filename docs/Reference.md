@@ -10,6 +10,7 @@ t = Tree('foo')
 loads a tree from file 'foo'
 
 ### Tree attributes
+
 * `tree.dim` dimension of state space
 * `tree.depth` depth of the tree, i.e. number of levels
 * `tree.center` center of the outer box Q
@@ -18,7 +19,9 @@ loads a tree from file 'foo'
 * `tree.radius = r` sets the radius of outer box Q to r
 * `tree.sd` vector which defines in which coordinate direction nodes/boxes on a certain depth will be subdivided. Boxes on depth i will be subdivided in coordinate direction `tree.sd[i]`
 * `tree.sd = sd` sets the vector `tree.sd` to `sd`
+
 ### Tree methods
+
 * `tree.boxes(depth)` returns the box collection on depth `depth` (use `depth = -1` for the leaves). Each column of the returned ((2*dim+2) x m)-matrix (where m is number of boxes on depth `depth`) describes one box B(c,r) in the format `[center; radius; flags; color]`
 * `tree.change_flags(which, from, to, depth)` see set_flags, changes the flags at the given depth from `from` to `to`
 * `tree.count(depth)` enumerates the boxes and returns the number of boxes on depth `depth`
