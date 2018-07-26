@@ -12,7 +12,7 @@ After unpacking the archive add the resulting folder to your Matlab path, e.g.
    
 ## Documentation
 
-[INtroductory example](Introductory_example.md)
+[Introductory example](Introductory-example.md)
     
 ## References
 
