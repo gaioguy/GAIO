@@ -12,9 +12,8 @@ After unpacking the archive add the resulting folder to your Matlab path, e.g.
    
 ## Documentation
 
-[Introductory example](Introductory-example.md)
-
-[The tree data structure](The-tree-data-structure.md)
+1. [Introductory example](Introductory-example.md)
+1. [The tree data structure](The-tree-data-structure.md)
     
 ## References
 
