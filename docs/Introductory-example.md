@@ -14,7 +14,7 @@ for k = 1:n,
 end               
 scatter(x(10:end,1),x(10:end,2),2,'k'); 
 ```
-<img src="https://github.com/gaioguy/GAIO/blob/master/doc/henon-simulation.png" width="400px"/>
+<img src="henon-simulation.png" width="400px"/>
 
 In order to begin the GAIO computation we initialize the tree data structure
 ```matlab
