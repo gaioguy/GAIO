@@ -5,9 +5,9 @@ tree = Tree(C, R)
 ```
 creates an empty tree with an outer box of center C and radius R.
 ```matlab
-t = Tree('foo') 
+tree = Tree('filename') 
 ```
-loads a tree from file 'foo'
+loads a tree from file 'filename'.
 
 ### Tree attributes
 
