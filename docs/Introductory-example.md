@@ -54,6 +54,7 @@ boxplot2(t,'edgecolor','r');
 hold on
 scatter(x(10:end,1),x(10:end,2),10,'k');
 ```
-<img src="henon-attractor.png" width="400px"/>
+<img src="" width="400px"/>
+![Relative global attractor in the Hénon map](henon-attractor.png)
 
 Note that the relative global attractor computed by GAIO (red) covers the attractor from simulation. In addition, it also covers the saddle fixed point at ~(-1.1,-0.35) and part of its unstable manifold.
