@@ -10,7 +10,7 @@ After unpacking the archive add the resulting folder to your Matlab path, e.g.
 
     >> addpath(genpath('/Users/gaioguy/GAIO'))
    
-## [Documentation](GAIO.md)
+## [Documentation](https://github.com/gaioguy/GAIO/wiki)
 
 ## References
 
