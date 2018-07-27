@@ -10,12 +10,8 @@ After unpacking the archive add the resulting folder to your Matlab path, e.g.
 
     >> addpath(genpath('/Users/gaioguy/GAIO'))
    
-## Documentation
+## [Documentation](GAIO.md)
 
-1. [Introductory example](Introductory-example.md)
-1. [The tree data structure](The-tree-data-structure.md)
-1. [Reference](Reference.md)
-    
 ## References
 
 * Dellnitz, M.; Froyland, G.; Junge, O.: The algorithms behind GAIO - Set oriented numerical methods for dynamical systems,
