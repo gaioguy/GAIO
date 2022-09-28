@@ -14,6 +14,8 @@ After unpacking the archive add the resulting folder to your Matlab path, e.g.
    
 ## [Documentation](https://github.com/gaioguy/GAIO/wiki)
 
+Compatibility with [Octave](https://octave.org) is currently untested.
+
 ## References
 
 * Dellnitz, M.; Froyland, G.; Junge, O.: The algorithms behind GAIO - Set oriented numerical methods for dynamical systems,
