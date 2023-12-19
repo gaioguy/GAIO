@@ -6,6 +6,8 @@
 * invariant measures, almost invariant sets, coherent sets
 * value functions for optimal control problems
 
+Note: This package is superseded by [GAIO.jl](https://github.com/gaioguys/GAIO.jl).
+
 ## Installation
 
 After unpacking the archive add the resulting folder to your Matlab path, e.g.
