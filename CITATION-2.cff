@@ -1,0 +1,32 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: GAIO
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Oliver
+    family-names: Junge
+repository-code: 'https://github.com/gaioguy/GAIO'
+abstract: >-
+  GAIO (Global Analysis of Invariant Objects) is a C library
+  and Matlab toolbox for the computational analysis of
+  dynamical systems. GAIO provides data structures and
+  algorithms for the approximation of invariant sets
+  (maximal invariant set, chain recurrent set, attractor) of
+  arbitrary dimension or topology, invariant manifolds
+  (stable/unstable manifold of an arbitrary invariant set).
+  Based on these, Galerkin discretizations of the
+  Frobenius-Perron and the Koopman operator are provided,
+  enabling the approximation of invariant measures, almost
+  invariant sets, almost cyclic as well as coherent sets.
+keywords:
+  - >-
+    dynamical system, set-oriented numerics, box
+    discretization, transfer operator, Koopman operator,
+    invariant set, invariant measure
+version: '3.0'
+date-released: '2015-12-31'
